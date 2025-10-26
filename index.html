@@ -1,170 +1,202 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>For Junmoni — A Little Code</title>
-  <style>
-    :root{--bg:#0b1020;--panel:#0f1724;--accent:#ff6b9a;--muted:#9aa4b2}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
-      background:radial-gradient(circle at 10% 10%, #091021 0%, var(--bg) 40%), linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
-      color:#d7e3f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .card{width:900px;max-width:100%;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(2,6,23,0.7);display:grid;grid-template-columns:1fr 1fr}
-    .terminal{background:linear-gradient(180deg,var(--panel), #071022);padding:28px 20px;min-height:420px}
-    .title{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-    .dots{display:flex;gap:6px}.dot{width:12px;height:12px;border-radius:50%}.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
-    .code{background:#071021;padding:18px;border-radius:10px;color:#cde7ff;font-size:15px;line-height:1.5;min-height:300px;position:relative;overflow:hidden;white-space:pre-wrap}
-    .cursor{display:inline-block;width:8px;background:var(--accent);margin-left:6px;animation:blink 1s infinite}
-    @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
-    .reveal{background:linear-gradient(180deg,#071226, #081124);padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
-    .heart-bg{position:absolute;inset:0;pointer-events:none}
-    .heart{position:absolute;opacity:0.06;font-size:80px;transform:translate(-50%,-50%) rotate(-20deg)}
-    .name{font-size:28px;color:var(--accent);font-weight:700;margin:0}
-    .msg{color:var(--muted);text-align:center;max-width:360px}
-    .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 16px;border-radius:10px;color:var(--accent);cursor:pointer}
-    .floating-heart{position:absolute;bottom:-40px;font-size:20px;opacity:0.9;animation:floatUp linear infinite}
-    @keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0}10%{opacity:1}100%{transform:translateY(-520px) scale(1.1);opacity:0}}
-    .fade{opacity:0;transform:translateY(8px);transition:all .45s ease}
-    .fade.show{opacity:1;transform:none}
-    @media (max-width:800px){.card{grid-template-columns:1fr}.reveal{padding:18px}.code{min-height:260px}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>For Aliya — A Quiet Letter</title>
+<style>
+  :root{
+    --bg:#071026;
+    --panel:#0f1724;
+    --accent:#ff7aa2;
+    --muted:#9aa4b2;
+    --letter:#f6e9ed;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    background:radial-gradient(circle at 10% 10%, #081127 0%, #041022 40%), linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    color:#d7e3f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{width:960px;max-width:96%;border-radius:16px;overflow:hidden;box-shadow:0 18px 60px rgba(2,6,23,0.7);display:grid;grid-template-columns:1fr 1fr}
+  /* left: terminal */
+  .terminal{background:linear-gradient(180deg,var(--panel), #071022);padding:28px 22px;min-height:480px}
+  .title{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+  .dots{display:flex;gap:6px}.dot{width:12px;height:12px;border-radius:50%}.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+  .code{background:#071021;padding:18px;border-radius:10px;color:#cde7ff;font-size:15px;line-height:1.6;min-height:380px;position:relative;overflow:auto;white-space:pre-wrap}
+  .cursor{display:inline-block;width:8px;background:var(--accent);margin-left:6px;animation:blink 1s infinite;vertical-align:bottom}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+  /* right: letter */
+  .letterPanel{background:linear-gradient(180deg,#071226, #081124);padding:36px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative}
+  .heading{font-size:30px;color:var(--accent);font-weight:700;margin:0 0 8px}
+  .subtitle{color:var(--muted);margin:0 0 18px;text-align:center}
+  .letterBox{max-width:520px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.02)}
+  .letterText{font-family: Georgia, 'Times New Roman', serif;color:var(--letter);font-size:18px;line-height:1.65;opacity:0;transform:translateY(6px);transition:all .6s ease;text-align:left}
+  .letterText.show{opacity:1;transform:none}
+  .controls{display:flex;gap:10px;margin-top:18px}
+  .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 14px;border-radius:10px;color:var(--accent);cursor:pointer}
+  .btn.secondary{color:#dfefff}
+  .credit{position:absolute;bottom:12px;font-size:12px;color:#93b4d8;opacity:0.7;left:18px}
+  @media (max-width:880px){.card{grid-template-columns:1fr}.terminal{padding:18px}.letterPanel{padding:18px}}
+</style>
 </head>
 <body>
   <div class="card" role="main">
-    <div class="terminal">
+    <div class="terminal" aria-label="typing code">
       <div class="title">
         <div class="dots"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
-        <div style="margin-left:auto;color:var(--muted);font-size:13px">project: crush.js</div>
+        <div style="margin-left:auto;color:var(--muted);font-size:13px">project: quiet-letter</div>
       </div>
-
-      <div id="codeArea" class="code" aria-live="polite"></div>
+      <div id="codeArea" class="code" aria-live="polite"></div><span id="cursor" class="cursor" aria-hidden="true"></span>
     </div>
 
-    <div class="reveal">
-      <div class="heart-bg" aria-hidden="true">
-        <div class="heart" style="left:25%;top:10%;">❤</div>
-        <div class="heart" style="left:70%;top:30%;font-size:120px;opacity:0.04">❤</div>
-        <div class="heart" style="left:50%;top:70%;font-size:100px;opacity:0.03">❤</div>
+    <div class="letterPanel">
+      <h2 class="heading">Hey Aliya</h2>
+      <p class="subtitle">A small letter — honest and steady.</p>
+
+      <div class="letterBox">
+        <div id="letterText" class="letterText" aria-hidden="true">
+          <!-- single-paragraph letter goes here (revealed on button) -->
+          I am grateful for how easily your presence makes ordinary days feel softer—your quiet kindness, your honest laugh, the way you listen—have been a steady light for me. I may not always say it, but knowing you has made me calmer and braver; I keep finding small reasons to smile because you are near, and if I could offer one thing in return it would be the care and patience you've shown me every day.
+        </div>
       </div>
 
-      <h2 id="greeting" class="name">Hey Junmoni 👋</h2>
-      <p id="desc" class="msg fade">I started with a little code — and somehow it led me here. Click the button to reveal something sweet.</p>
-      <div style="display:flex;gap:10px">
-        <button id="revealBtn" class="btn">Reveal →</button>
-        <button id="copyBtn" class="btn" title="Copy a short note to send">Copy note</button>
+      <div class="controls" role="group" aria-label="controls">
+        <button id="playBtn" class="btn">▶ Play music</button>
+        <button id="revealBtn" class="btn secondary">Reveal letter</button>
+        <button id="copyBtn" class="btn secondary">Copy letter</button>
       </div>
+
+      <div class="credit">Made with care</div>
     </div>
   </div>
 
-  <script>
-    // Robust helpers
-    function safe(q){ return document.querySelector(q); }
-    function logErr(e){ console.error("Page error:", e); }
+  <!-- audio source: free piano from Pixabay -->
+  <audio id="bgAudio" loop preload="none">
+    <source src="https://cdn.pixabay.com/download/audio/2022/10/24/audio_cdfb7cbb1a.mp3" type="audio/mpeg">
+  </audio>
 
-    // Typing text
-    const codeLines = [
-      "// initializing feelings...",
-      "const crush = {",
-      "  name: \"Junmoni\",",
-      "  smile: () => \"sunrise()\",",
-      "  laugh: () => \"melody()\",",
-      "  effectOnMe: \"infinite\",",
-      "};",
-      "",
-      "if (crush.name === \"Junmoni\") {",
-      "  heart.rate += 20; // tiny bug: joy.level = 'too-high';",
-      "}",
-      "",
-      "// run this when you're ready:",
-      "function ask() {",
-      "  return `Would you like to go out for coffee? ☕️`",
-      "}",
-      "// — end of playful code —",
-    ];
+<script>
+/* ========== Typing left panel (like Junmoni) ========== */
+(function(){
+  const lines = [
+    "// starting quiet-letter...",
+    "const letter = {",
+    "  to: \"Aliya\",",
+    "  tone: \"gentle\",",
+    "  purpose: \"to say thank you for being close\",",
+    "};",
+    "",
+    "// small notes about you",
+    "notes.push(\"you make ordinary moments feel calm\");",
+    "notes.push(\"your laugh is a quiet sunrise\");",
+    "",
+    "// prepare the letter (reveal on request)",
+    "function prepare() {",
+    "  return 'letter.ready = true;';",
+    "}",
+    "",
+    "// — end of typing —"
+  ];
 
-    const codeArea = safe('#codeArea');
-    const revealBtn = safe('#revealBtn');
-    const copyBtn = safe('#copyBtn');
-    const desc = safe('#desc');
-    const greeting = safe('#greeting');
+  const codeArea = document.getElementById('codeArea');
+  const cursor = document.getElementById('cursor');
 
-    if (!codeArea || !revealBtn || !copyBtn) {
-      console.error("Required DOM elements not found. Make sure this exact HTML is in index.html");
+  let li=0, ci=0;
+  const TYPE_SPEED = 26, LINE_DELAY = 480;
+
+  function typeNextChar(){
+    if(li >= lines.length){
+      cursor.style.display = 'none';
+      return;
     }
-
-    // typing effect
-    (function typeEffect(){
-      let li = 0, ci = 0;
-      const T = 24, LD = 420;
-      function step(){
-        try {
-          if (li >= codeLines.length) return;
-          const line = codeLines[li];
-          if (ci < line.length) {
-            codeArea.textContent += line[ci++];
-            setTimeout(step, T);
-          } else {
-            codeArea.textContent += "\n";
-            li++; ci = 0;
-            setTimeout(step, LD);
-          }
-        } catch(e){ logErr(e); }
-      }
-      setTimeout(step, 600);
-    })();
-
-    // Keep reveal idempotent and safe
-    function createFloatingHeart() {
-      const container = safe('.reveal');
-      if (!container) return;
-      const heart = document.createElement('div');
-      heart.className = 'floating-heart';
-      heart.style.left = (20 + Math.random()*60) + '%';
-      heart.style.fontSize = (12 + Math.random()*36) + 'px';
-      heart.style.animationDuration = (3 + Math.random()*4) + 's';
-      heart.innerText = '❤';
-      container.appendChild(heart);
-      setTimeout(()=> heart.remove(), 7000);
+    const line = lines[li];
+    if(ci < line.length){
+      codeArea.textContent += line[ci++];
+      setTimeout(typeNextChar, TYPE_SPEED + (Math.random()*8));
+    } else {
+      codeArea.textContent += '\\n';
+      li++; ci=0;
+      setTimeout(typeNextChar, LINE_DELAY);
     }
+    // keep scroll at bottom
+    codeArea.scrollTop = codeArea.scrollHeight;
+  }
+  setTimeout(typeNextChar, 600);
+})();
 
-    function revealAction(){
-      try {
-        // animate hearts
-        for(let i=0;i<8;i++) setTimeout(createFloatingHeart, i*120);
+/* ========== Controls: music, reveal, copy ========== */
+(function(){
+  const playBtn = document.getElementById('playBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const letterText = document.getElementById('letterText');
+  const audio = document.getElementById('bgAudio');
 
-        // reveal text with fade-in
-        desc.classList.add('show');
-        desc.textContent = "I think you’re smart and kind, and I’d love to take you out for coffee sometime — no pressure, just curious to know you better.";
-        greeting.textContent = "Junmoni, wanna grab coffee? ☕️";
+  // tidy single-letter text (you can edit this string)
+  const letterFull = letterText.textContent.trim();
 
-        revealBtn.disabled = true;
-        revealBtn.textContent = "Sent ❤️";
-
-        // small visual cue in code area
-        codeArea.textContent += "\n// message prepared: readyToSend = true;";
-      } catch(e){ logErr(e); }
-    }
-
-    // Attach listeners safely
+  let audioStarted = false;
+  playBtn.addEventListener('click', async function(){
     try {
-      revealBtn.addEventListener('click', revealAction);
-      copyBtn.addEventListener('click', async () => {
-        const note = "Hey Junmoni — would you like to go for coffee sometime? I’d love to know you better. :)";
-        try {
-          await navigator.clipboard.writeText(note);
-          copyBtn.textContent = 'Copied!';
-          setTimeout(()=> copyBtn.textContent = 'Copy note', 1500);
-        } catch (err) {
-          alert('Could not copy. Please select and copy manually:\\n' + note);
-        }
-      });
-      // keyboard accessibility
-      document.addEventListener('keydown', (e) => { if (e.key === 'Enter') revealBtn.click(); });
-    } catch(e){ logErr(e); }
+      if (audio.paused){
+        await audio.play();
+        audioStarted = true;
+        playBtn.textContent = '⏸ Pause music';
+        // subtle cue in code area
+        const ca = document.getElementById('codeArea');
+        ca.textContent += '\\n// bgAudio.play();';
+        ca.scrollTop = ca.scrollHeight;
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶ Play music';
+      }
+    } catch(e){
+      alert('Unable to play audio here. Try downloading the page and playing locally or check the audio URL.');
+      console.error(e);
+    }
+  });
 
-    // helpful debug to console
-    console.log("Loaded: If clicking Reveal does nothing, open console (F12) and paste any error here.");
-  </script>
+  revealBtn.addEventListener('click', function(){
+    if (letterText.classList.contains('show')) return;
+    // reveal as a single flowing paragraph
+    // we'll animate with a subtle fade and small type-in effect
+    letterText.classList.add('show');
+    letterText.setAttribute('aria-hidden','false');
+
+    // optional: gentle type-in for the letter (keeps single paragraph)
+    letterText.textContent = '';
+    let i=0;
+    function step(){
+      if (i <= letterFull.length){
+        letterText.textContent = letterFull.slice(0,i);
+        i++;
+        setTimeout(step, 12);
+      } else {
+        // final marker in code area
+        const ca = document.getElementById('codeArea');
+        ca.textContent += '\\n// letter.sent = false; // waiting for reply';
+        ca.scrollTop = ca.scrollHeight;
+      }
+    }
+    step();
+
+    revealBtn.textContent = 'Shown ✓';
+    revealBtn.disabled = true;
+  });
+
+  copyBtn.addEventListener('click', async function(){
+    try {
+      await navigator.clipboard.writeText(letterFull);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(()=> copyBtn.textContent = 'Copy letter', 1500);
+    } catch(e){
+      alert('Could not copy automatically — please select the letter and copy it manually.');
+      console.error(e);
+    }
+  });
+
+  // accessibility: Enter reveals
+  document.addEventListener('keydown', (e)=>{ if (e.key === 'Enter') revealBtn.click(); });
+})();
+</script>
 </body>
 </html>
