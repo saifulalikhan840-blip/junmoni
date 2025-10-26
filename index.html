@@ -5,42 +5,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>For Junmoni — A Little Code</title>
   <style>
-    :root{
-      --bg:#0b1020;
-      --panel:#0f1724;
-      --accent:#ff6b9a;
-      --muted:#9aa4b2;
-    }
+    :root{--bg:#0b1020;--panel:#0f1724;--accent:#ff6b9a;--muted:#9aa4b2}
     *{box-sizing:border-box}
-    body{margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;background:radial-gradient(circle at 10% 10%, #091021 0%, var(--bg) 40%), linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));color:#d7e3f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-
-    /* container */
+    body{margin:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+      background:radial-gradient(circle at 10% 10%, #091021 0%, var(--bg) 40%), linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+      color:#d7e3f0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
     .card{width:900px;max-width:100%;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(2,6,23,0.7);display:grid;grid-template-columns:1fr 1fr}
-
-    /* left: code terminal */
     .terminal{background:linear-gradient(180deg,var(--panel), #071022);padding:28px 20px;min-height:420px}
     .title{display:flex;gap:10px;align-items:center;margin-bottom:12px}
-    .dots{display:flex;gap:6px}
-    .dot{width:12px;height:12px;border-radius:50%}
-    .d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
-    .code{background:#071021;padding:18px;border-radius:10px;color:#cde7ff;font-size:15px;line-height:1.5;min-height:300px;position:relative;overflow:hidden}
-    .typed-line{white-space:pre-wrap}
+    .dots{display:flex;gap:6px}.dot{width:12px;height:12px;border-radius:50%}.d1{background:#ff5f56}.d2{background:#ffbd2e}.d3{background:#27c93f}
+    .code{background:#071021;padding:18px;border-radius:10px;color:#cde7ff;font-size:15px;line-height:1.5;min-height:300px;position:relative;overflow:hidden;white-space:pre-wrap}
     .cursor{display:inline-block;width:8px;background:var(--accent);margin-left:6px;animation:blink 1s infinite}
     @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
-
-    /* right: romantic reveal */
     .reveal{background:linear-gradient(180deg,#071226, #081124);padding:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
     .heart-bg{position:absolute;inset:0;pointer-events:none}
-    .heart{position:absolute;opacity:0.08;font-size:80px;transform:translate(-50%,-50%) rotate(-20deg)}
+    .heart{position:absolute;opacity:0.06;font-size:80px;transform:translate(-50%,-50%) rotate(-20deg)}
     .name{font-size:28px;color:var(--accent);font-weight:700;margin:0}
-    .msg{color:var(--muted);text-align:center;max-width:320px}
+    .msg{color:var(--muted);text-align:center;max-width:360px}
     .btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px 16px;border-radius:10px;color:var(--accent);cursor:pointer}
-
-    /* hearts animation */
     .floating-heart{position:absolute;bottom:-40px;font-size:20px;opacity:0.9;animation:floatUp linear infinite}
     @keyframes floatUp{0%{transform:translateY(0) scale(0.8);opacity:0}10%{opacity:1}100%{transform:translateY(-520px) scale(1.1);opacity:0}}
-
-    /* smaller screens */
+    .fade{opacity:0;transform:translateY(8px);transition:all .45s ease}
+    .fade.show{opacity:1;transform:none}
     @media (max-width:800px){.card{grid-template-columns:1fr}.reveal{padding:18px}.code{min-height:260px}}
   </style>
 </head>
@@ -48,136 +34,137 @@
   <div class="card" role="main">
     <div class="terminal">
       <div class="title">
-        <div class="dots">
-          <div class="dot d1"></div>
-          <div class="dot d2"></div>
-          <div class="dot d3"></div>
-        </div>
+        <div class="dots"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
         <div style="margin-left:auto;color:var(--muted);font-size:13px">project: crush.js</div>
       </div>
 
-      <div class="code" aria-live="polite">
-        <div id="typing" class="typed-line"></div><span id="cursor" class="cursor"></span>
-      </div>
-
+      <div id="codeArea" class="code" aria-live="polite"></div>
     </div>
 
     <div class="reveal">
       <div class="heart-bg" aria-hidden="true">
         <div class="heart" style="left:25%;top:10%;">❤</div>
-        <div class="heart" style="left:70%;top:30%;font-size:120px;opacity:0.06">❤</div>
-        <div class="heart" style="left:50%;top:70%;font-size:100px;opacity:0.05">❤</div>
+        <div class="heart" style="left:70%;top:30%;font-size:120px;opacity:0.04">❤</div>
+        <div class="heart" style="left:50%;top:70%;font-size:100px;opacity:0.03">❤</div>
       </div>
 
-      <h2 class="name">Hey Junmoni 👋</h2>
-      <p class="msg">I started with a little code — and somehow it led me here. Click the button to reveal something silly and sweet.</p>
+      <h2 id="greeting" class="name">Hey Junmoni 👋</h2>
+      <p id="desc" class="msg fade">I started with a little code — and somehow it led me here. Click the button to reveal something sweet.</p>
       <div style="display:flex;gap:10px">
         <button id="revealBtn" class="btn">Reveal →</button>
         <button id="copyBtn" class="btn" title="Copy a short note to send">Copy note</button>
       </div>
-
-      <!-- floating hearts (created by JS) -->
     </div>
   </div>
 
   <script>
-    // Typing lines shown in the 'code' panel
-    const lines = [
+    // Robust helpers
+    function safe(q){ return document.querySelector(q); }
+    function logErr(e){ console.error("Page error:", e); }
+
+    // Typing text
+    const codeLines = [
       "// initializing feelings...",
       "const crush = {",
-      "  name: \"Junmoni\"," ,
-      "  smile: () => \"sunrise()\"," ,
-      "  laugh: () => \"melody()\"," ,
-      "  effectOnMe: \"infinite\",
+      "  name: \"Junmoni\",",
+      "  smile: () => \"sunrise()\",",
+      "  laugh: () => \"melody()\",",
+      "  effectOnMe: \"infinite\",",
       "};",
       "",
       "if (crush.name === \"Junmoni\") {",
-      "  heart.rate += 20; // just a little\n  joy.level = 'too-high';",
+      "  heart.rate += 20; // tiny bug: joy.level = 'too-high';",
       "}",
       "",
       "// run this when you're ready:",
-      "function ask(outcome) {",
-      "  return `Would you like to go out for coffee? ❤️`",
+      "function ask() {",
+      "  return `Would you like to go out for coffee? ☕️`",
       "}",
-      "",
       "// — end of playful code —",
     ];
 
-    const typingEl = document.getElementById('typing');
-    const cursor = document.getElementById('cursor');
+    const codeArea = safe('#codeArea');
+    const revealBtn = safe('#revealBtn');
+    const copyBtn = safe('#copyBtn');
+    const desc = safe('#desc');
+    const greeting = safe('#greeting');
 
-    let lineIndex = 0, charIndex = 0;
-    const TYPE_SPEED = 28;
-    const LINE_DELAY = 500;
-
-    function typeNextChar() {
-      if (lineIndex >= lines.length) {
-        cursor.style.display = 'none';
-        // show subtle glow on the right side to invite interaction
-        return;
-      }
-      const line = lines[lineIndex];
-      if (charIndex < line.length) {
-        typingEl.innerText += line[charIndex++];
-        setTimeout(typeNextChar, TYPE_SPEED);
-      } else {
-        typingEl.innerText += '\n';
-        lineIndex++;
-        charIndex = 0;
-        setTimeout(typeNextChar, LINE_DELAY);
-      }
+    if (!codeArea || !revealBtn || !copyBtn) {
+      console.error("Required DOM elements not found. Make sure this exact HTML is in index.html");
     }
-    // Start typing after a short delay
-    setTimeout(typeNextChar, 600);
 
-    // Reveal interaction
-    const revealBtn = document.getElementById('revealBtn');
-    const copyBtn = document.getElementById('copyBtn');
-
-    revealBtn.addEventListener('click', () => {
-      // create a soft transition by animating hearts
-      for (let i=0;i<8;i++) createFloatingHeart();
-
-      // gentle message reveal: replace the text with a sweet, flirty line
-      const p = document.querySelector('.msg');
-      p.innerText = "I think you’re brilliant, and I’d love to take you out for coffee sometime. No pressure — just curious to know you better.";
-
-      // change the name heading slightly
-      const h = document.querySelector('.name');
-      h.innerText = 'Junmoni, wanna grab coffee? ☕️';
-
-      // small confetti-ish hearts effect handled by CSS animations
-      revealBtn.disabled = true; revealBtn.innerText = 'Sent ❤️';
-    });
-
-    copyBtn.addEventListener('click', async () => {
-      const note = "Hey Junmoni — would you like to go for coffee sometime? I’d love to know you better. :)";
-      try {
-        await navigator.clipboard.writeText(note);
-        copyBtn.innerText = 'Copied!';
-        setTimeout(()=> copyBtn.innerText = 'Copy note', 1500);
-      } catch (e) {
-        alert('Could not copy — you can manually select and copy the note.');
+    // typing effect
+    (function typeEffect(){
+      let li = 0, ci = 0;
+      const T = 24, LD = 420;
+      function step(){
+        try {
+          if (li >= codeLines.length) return;
+          const line = codeLines[li];
+          if (ci < line.length) {
+            codeArea.textContent += line[ci++];
+            setTimeout(step, T);
+          } else {
+            codeArea.textContent += "\n";
+            li++; ci = 0;
+            setTimeout(step, LD);
+          }
+        } catch(e){ logErr(e); }
       }
-    });
+      setTimeout(step, 600);
+    })();
 
+    // Keep reveal idempotent and safe
     function createFloatingHeart() {
+      const container = safe('.reveal');
+      if (!container) return;
       const heart = document.createElement('div');
       heart.className = 'floating-heart';
       heart.style.left = (20 + Math.random()*60) + '%';
       heart.style.fontSize = (12 + Math.random()*36) + 'px';
       heart.style.animationDuration = (3 + Math.random()*4) + 's';
-      heart.style.opacity = 0.9;
       heart.innerText = '❤';
-      document.querySelector('.reveal').appendChild(heart);
+      container.appendChild(heart);
       setTimeout(()=> heart.remove(), 7000);
     }
 
-    // Accessibility: allow pressing Enter to reveal
-    document.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter') revealBtn.click();
-    });
+    function revealAction(){
+      try {
+        // animate hearts
+        for(let i=0;i<8;i++) setTimeout(createFloatingHeart, i*120);
 
+        // reveal text with fade-in
+        desc.classList.add('show');
+        desc.textContent = "I think you’re smart and kind, and I’d love to take you out for coffee sometime — no pressure, just curious to know you better.";
+        greeting.textContent = "Junmoni, wanna grab coffee? ☕️";
+
+        revealBtn.disabled = true;
+        revealBtn.textContent = "Sent ❤️";
+
+        // small visual cue in code area
+        codeArea.textContent += "\n// message prepared: readyToSend = true;";
+      } catch(e){ logErr(e); }
+    }
+
+    // Attach listeners safely
+    try {
+      revealBtn.addEventListener('click', revealAction);
+      copyBtn.addEventListener('click', async () => {
+        const note = "Hey Junmoni — would you like to go for coffee sometime? I’d love to know you better. :)";
+        try {
+          await navigator.clipboard.writeText(note);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = 'Copy note', 1500);
+        } catch (err) {
+          alert('Could not copy. Please select and copy manually:\\n' + note);
+        }
+      });
+      // keyboard accessibility
+      document.addEventListener('keydown', (e) => { if (e.key === 'Enter') revealBtn.click(); });
+    } catch(e){ logErr(e); }
+
+    // helpful debug to console
+    console.log("Loaded: If clicking Reveal does nothing, open console (F12) and paste any error here.");
   </script>
 </body>
 </html>
